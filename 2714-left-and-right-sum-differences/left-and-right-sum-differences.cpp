@@ -2,19 +2,14 @@ class Solution {
 public:
     vector<int> leftRightDifference(vector<int>& nums) {
         int n = nums.size();
+        vector<int> res(n);
 
-        vector<int> res(n, 0);
+        int lsum = 0, rsum = accumulate(nums.begin(), nums.end(), 0);
 
-        // finding suffix sum
-        for(int i = n - 2; i >= 0; i--) {
-            res[i] = nums[i+1] + res[i+1];
-        }
-
-        // finding prefix sum and subtracting
-        int lsum = 0;
-        for(int i = 1; i < n; i++) {
-            lsum += nums[i-1];
-            res[i] = abs(res[i] - lsum);
+        for(int i = 0; i < n; i++) {
+            rsum -= nums[i];
+            res[i] = (rsum >= lsum) ? rsum - lsum : lsum - rsum;
+            lsum += nums[i];
         }
 
         return res;
